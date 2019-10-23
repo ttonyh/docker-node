@@ -7,6 +7,13 @@ RUN addgroup -g 1000 node \
     && adduser -u 1000 -G node -s /bin/sh -D node \
     && apk add --no-cache \
         libstdc++ \
+        git \
+        bash \
+        openssl \
+        ca-certificates \
+        build-base \
+        python \
+        python-dev \
     && apk add --no-cache --virtual .build-deps \
         binutils-gold \
         curl \
@@ -48,6 +55,13 @@ RUN addgroup -g 1000 node \
     && cd .. \
     && rm -Rf "node-v$NODE_VERSION" \
     && rm "node-v$NODE_VERSION.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt
+
+
+# Update NPM
+RUN npm install -g npm
+
+# Install app dependencies
+RUN npm install -g pm2
 
 
 COPY docker-entrypoint.sh /usr/local/bin/
